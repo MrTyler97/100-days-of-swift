@@ -1,2 +1,2 @@
-# 100 days of swfit
+# 100 days of swift
  Upskilling 
