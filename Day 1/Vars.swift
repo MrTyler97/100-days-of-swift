@@ -88,4 +88,137 @@ enum Planet: Int {
 var earth = Planet(rawValue: 2)
 earth = Planet.earth
 
-//Day 1 & 2 Concluded
+//Day 1 & 2 Concluded --------------------------------------------------------------------------
+
+// Arithmetic operators
+// Typical in java / python
+
+// Calculations
+// + = / - * %
+
+// Overloading - concatinating
+let fake = "Hey"
+let fake2 = fake + " boo"
+let array = [1, 2, 3]
+let array2 = [4, 5, 6]
+let array3 = array + array2
+
+// Compound assignment
+// Typical in java / python
+// += -=
+
+// Comparison
+// > < >= <= == !=
+
+// Conditions
+let firstcard = 11
+let secondcard = 12
+
+if firstcard > secondcard {
+    print("First card is higher")
+} else {
+    print("Second card is higher")
+}
+// Condition combining
+// && ||
+
+// Ternery
+let thirdcard = 13
+
+print(thirdcard > secondcard ? "First card is higher" : "Second card is higher")
+
+// Switch case same as java or python
+
+//Ranges must use ...
+let range = 1...5
+for i in 1...10 {
+    print(i)
+}
+
+var times = 0
+while true {
+    print("Hello World")
+    times += 1
+    if times == 5 {
+        break
+    }
+}
+// break out certain nested loops
+outerLoop: for i in 1...10 {
+    for j in 1...10 {
+        let product = i * j
+        print("\(i) * \(j) is \(product)")
+
+        if product == 50 {
+            print("It's a bullseye!")
+            break outerLoop
+        }
+    }
+}
+// Skip iteration uses continue obviously
+
+//Functions
+func sayHi() {
+    print("Hello World")
+}
+sayHi()
+// using '-> (var type)' in function creation expects an retrun statement
+func saySomething(message: String) -> String {
+    let addingToMessage = " Im doing well."
+    return message + addingToMessage
+}
+//must add argument name -> message
+print(saySomething(message: "How are you"))
+
+// Unique parameters things to be conciouse of
+func sayHello(to name: String) -> String {
+    return "Hello, \(name)!"
+}
+// to name -> Externally its called 'to' internally its called 'name' i.e (to name: )
+print(sayHello(to: "Alice"))
+
+// can use _ to omit external naming
+func sayHello2(_ name: String) -> String {
+    return "Hello, \(name)!"
+}
+print(sayHello2("Bob"))
+
+// Default params are status quo to change simply call with param name externally and set it
+
+// Variadic functions -> paramter can be a rnage of numbers that gets turned into an array within a function
+func sumOfNumbers(_ numbers: Int...) {
+    for number in numbers {
+        print("\(number) squared is \(number * number)")
+    }
+}
+sumOfNumbers(1, 2, 3, 4, 5)
+
+// Throws and errors via function
+// Create an enum
+enum PasswordError: Error {
+    case obvious
+}
+// Create function
+func checkPassword(_ password: String) throws -> Bool {
+    if password == "password" {
+        throw PasswordError.obvious
+    }
+    return true
+}
+// To run throws it must be wrapped in try catch statements in swift. Each try must be in a do bracket
+
+do {
+    try checkPassword("password")
+    print("Password is valid")
+} catch {
+    print("Password is invalid")
+}
+// inout allows you to change parameters inside the function that is reflected outdside the function. Must use & in function call when using inout
+func increment(_ number: inout Int) {
+    number += 1
+}
+var x = 10
+increment(&x)
+print(x)
+
+// Day 3 - 5 completed --------------------------------------------------------------------------
