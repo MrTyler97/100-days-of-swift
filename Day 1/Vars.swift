@@ -222,3 +222,192 @@ increment(&x)
 print(x)
 
 // Day 3 - 5 completed --------------------------------------------------------------------------
+
+// Closures - Creating a function pased onto a variable
+
+let driving = {
+    print("I am driving")
+}
+// Calling the closure
+driving()
+
+// Accepting prarameters
+let driving2 = { (place: String) in
+    print("I am driving to \(place)")
+}
+driving2("Detroit")
+
+//Returning values (Remeber must use pointer and var type
+let driving3 = { (place: String) -> String in
+    return "I am driving to \(place)"
+}
+
+let message = driving3("Detroit")
+
+//Closures can also be used at parameters -> syntax for closure param is "closureName: ()"
+func travel(action: () -> Void) {
+    print("I'm getting ready to go.")
+    action()
+    print("I arrived!")
+}
+// Calling closure as param
+travel(action: driving)
+
+//If the last parameter to a function is a closure, Swift lets you use special syntax called trailing closure syntax. Rather than pass in your closure as a parameter, you pass it directly after the function inside braces.
+travel {
+    print("This is what's passed.")
+}
+
+// Returning closures
+// New function that accepts a closure
+func travel2(action: (String) -> String) {
+    print("Im ready to go")
+    var description = action("London")
+    print(description)
+    print("I arrived!")
+}
+// New closure that returns a value
+travel2 { (place: String) -> String in
+    return "I am driving to \(place)"
+}
+// Fun fact swift allows you to remove param type specification since this information was declared in function creation. The above code can be rewritten as follows:
+travel2 { place in
+    return "I am driving to \(place)"
+}
+// Closures with multiple params
+func travel3(action: (String, Int) -> String) {
+    print("Im getting ready to go")
+    var description = action("London", 1000)
+    print(description)
+    print("I arrived!")
+}
+travel3 { (place: String, speed: Int) in
+    return "I am driving to \(place) at \(speed) mph"
+}
+
+// Day 6 & 7 complete (REVIEW THIS PORTION OFTEN)
+
+// Structs (Structures) - Can be given their own variables, functions, and constants to be used however you see fit. Simlar to classes
+struct Sport {
+    var name: String
+}
+var mysport = Sport(name: "Basketball")
+print(mysport.name)
+// Changing my sport
+mysport.name = "Baseball"
+print(mysport.name)
+
+// Computed properties
+struct Sport2 {
+    // Stored properties
+    var name: String
+    var isOlympicSport: Bool
+    // Computed property
+    var olympicStatus: String {
+        if isOlympicSport {
+            return "Olympic Sport"
+        } else {
+            return "Not an Olympic Sport"
+        }
+    }
+}
+// Creating instance of my sport and grabbing the olympic status of it
+var mysport2 = Sport2(name: "Basketball", isOlympicSport: true)
+print(mysport2.olympicStatus)
+
+//Property observers - runs code before or after every property change
+struct Progress {
+    var task: String
+    var amount: Int {
+        //Property Observer
+        didSet {
+            print("\(task) is \(amount)% complete")
+        }
+    }
+}
+var progress = Progress(task: "Loading data", amount: 0)
+progress.amount = 25
+progress.amount = 50
+
+// Adding functions
+struct City {
+    var population: Int
+    // Nested Function only for city
+    func collectTaxes() -> Int {
+        return population * 500
+    }
+}
+var london = City(population: 9_000_000)
+print(london.collectTaxes())
+
+// Mutating methods - If you want to change a property inside of a method you must use the 'mutating keyword'
+struct Person {
+    var name: String
+    mutating func makeAnonymous() {
+        name = "Clssified"
+    }
+}
+var person = Person(name: "Vic")
+print(person.name)
+//Changing property with function
+person.makeAnonymous()
+print(person.name)
+
+// In swift String and Array var type is also a struct. Use name of string or array followed by . to see all associated functions
+var me = "Im awesome"
+me.isEmpty
+me.endIndex
+
+// Initializers - similar to constructors in classes. your default if nothing is passed
+struct User {
+    var username: String
+    // Initializer function
+    init() {
+        username = "Joe"
+        print("Default user created")
+    }
+}
+// Notice we don't need to specify anything when creating an instance
+var user = User()
+print(user.username)
+
+// Inside methods you can use 'self' like in classes
+
+// Lazy properties - lets you create some properties only when they are needed
+struct FamilyTree {
+    init() {
+        print("Creating family tree!")
+    }
+}
+struct Person2 {
+    var name: String
+    // When adding the lazy keyword the Family Tree struct is only created when directly accesed in the instance. Else it will always be created
+    lazy var familyTree = FamilyTree()
+
+    init(name: String) {
+        self.name = name
+    }
+}
+var ed = Person2(name: "Ed")
+// Now the strct has been created
+ed.familyTree
+
+// Static properties - property remains (as one) across all instances. Think of addind a 'static var counter' This will be plus one with every instance and you can get this val by calling the struct name rather than the instance name.
+
+// Access Control - lets you restrict which code can use properties and methods. just uses private keyword like in classes.
+struct Person3 {
+    private var id: String
+
+    init(id: String) {
+        self.id = id
+    }
+
+    func identify() -> String {
+        return "My social security number is \(id)"
+    }
+}
+let eddy = Person3(id: "12345")
+// eddy.id wont work since id its private must use function now
+print(eddy.identify())
+
+// Day 8 & 9 completed--------------------------------------------------------------------------
