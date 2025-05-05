@@ -411,3 +411,151 @@ let eddy = Person3(id: "12345")
 print(eddy.identify())
 
 // Day 8 & 9 completed--------------------------------------------------------------------------
+
+// Classes - Similar to structs execpt for 5 differences
+
+//1) Classes never come with an memberwise initializer. (You must always create and initializer)
+class Dog {
+    var breed: String
+    var name: String
+
+    init(breed: String, name: String) {
+        self.breed = breed
+        self.name = name
+    }
+}
+
+// 2) Classes can inherit all properties and methods from other classes. (Like java)
+class Pitbull: Dog {
+    // Can have its own initializer
+    init(name: String) {
+        //Swift always makes you call super.init() from child classes – just in case the parent class does some important work when it’s created.
+        super.init(breed: "Pitbull", name: name)
+    }
+}
+// 3) When you copy a struct, both the original and the copy are different things – changing one won’t change the other. When you copy a class, both the original and the copy point to the same thing, so changing one does change the other. Think of it as classes pointing to the same memory address when making copies.
+class Singer {
+    var name = "Gunna"
+}
+
+var singer1 = Singer()
+print(singer1.name)
+
+//Creating a copy
+var singer2 = singer1
+singer2.name = "Travis Scott"
+// Printing the original
+print(singer1.name)
+
+// 4) Classes can have deinitializers - code that gets run when an instance of a class is destroyed.
+class Human {
+    var name = "John Doe"
+    init() {
+        print("\(name) is alive!")
+    }
+    func printGreeting() {
+        print("Hello, I'm \(name)")
+    }
+    // Deinitializer
+    deinit {
+        print("\(name) is gone.")
+    }
+}
+// Running loop to create and destroy each instance
+for _ in 1...3 {
+    let person = Human()
+    person.printGreeting()
+    print()
+}
+
+// 5) Mutability - If you have a constant struct with a variable property, that property can’t be changed because the struct itself is constant. However, if you have a constant class with a variable property, that property can be changed.
+
+// Overriding - child class can overwrite inherited methods with its own method. Must use keyword override. -> override func makeNoise{}
+
+// Final classes - Swift gives us a final keyword just for this purpose: when you declare a class as being final, no other class can inherit from it. This means they can’t override your methods in order to change your behavior. -> Instead of class Dog{} its final class Dog{}
+
+// Day 10 complete ---------------------------------------------------------------------------
+
+// Protocols and extensions
+
+// Protocols are a way of describing what properties and methods something must have. You then tell Swift which types use that protocol – a process known as adopting or conforming to a protocol.
+
+protocol Identifiable {
+    // Requires all confoming types to have an id string that can be read or written
+    var id: String { get set }
+}
+// We can’t create instances of that protocol - it’s a description of what we want, rather than something we can create and use directly
+
+// Intead lets make a struct that conforms to it
+struct User1: Identifiable {
+    var id: String
+}
+// This function accepts ANY Identifiable object
+func displayID(thing: Identifiable) {
+    print("My ID is: \(thing.id)")
+}
+
+// Inheritiance - One protocol can inherit from another in a process known as protocol inheritance. Unlike with classes, you can inherit from multiple protocols at the same time
+
+protocol Payable {
+    func calculateWages() -> Int
+}
+protocol NeedsTraining {
+    func study()
+}
+protocol HasVacation {
+    func takeVacation(days: Int)
+}
+// Inheriting
+protocol Employee: Payable, NeedsTraining, HasVacation {
+
+}
+
+// Extensions - allows you to add methods to existing types.
+extension Int {
+    // Adding squared method
+    func squared() -> Int {
+        return self * self
+    }
+}
+
+var mynumber = 5
+print(mynumber.squared())
+
+// Protocol Extensions - extend a whole protocol so that all conforming types get your changes.
+
+// Swift’s arrays and sets both conform to a protocol called Collection, so we can write an extension to that protocol to add a summarize() method to print the collection neatly
+
+extension Collection {
+    func summarize() {
+        print("There are \(count) elements in this collection:")
+        for element in self {
+            print(element)
+        }
+    }
+}
+
+let pythons = ["Python", "Ruby", "Swift", "JavaScript"]
+pythons.summarize()
+
+// Protocol Oriented Programming (POP) - Protocol extensions can provide default implementations for our own protocol methods. This makes it easy for types to conform to a protocol, and allows a technique called “protocol-oriented programming” – crafting your code around protocols and protocol extensions.
+
+protocol Identifiable2 {
+    var id: String { get set }
+    func identify()
+}
+// Every confomring type will have their own indentify method
+extension Identifiable2 {
+    func identify() {
+        print("My ID is \(id)")
+    }
+}
+
+// Remember after creating a protocol we must make a stuct in order to use it
+struct Person4: Identifiable2 {
+    var id: String
+}
+let person4 = Person4(id: "1234")
+person4.identify()
+
+// Day 11 completed --------------------------------------------------------------------------
