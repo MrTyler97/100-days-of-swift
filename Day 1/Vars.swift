@@ -559,3 +559,239 @@ let person4 = Person4(id: "1234")
 person4.identify()
 
 // Day 11 completed --------------------------------------------------------------------------
+// Protocols and extensions
+
+// Protocols are a way of describing what properties and methods something must have. You then tell Swift which types use that protocol – a process known as adopting or conforming to a protocol.
+
+protocol Identifiable {
+    // Requires all confoming types to have an id string that can be read or written
+    var id: String { get set }
+}
+// We can’t create instances of that protocol - it’s a description of what we want, rather than something we can create and use directly
+
+// Intead lets make a struct that conforms to it
+struct User1: Identifiable {
+    var id: String
+}
+// This function accepts ANY Identifiable object
+func displayID(thing: Identifiable) {
+    print("My ID is: \(thing.id)")
+}
+
+// Inheritiance - One protocol can inherit from another in a process known as protocol inheritance. Unlike with classes, you can inherit from multiple protocols at the same time
+
+protocol Payable {
+    func calculateWages() -> Int
+}
+protocol NeedsTraining {
+    func study()
+}
+protocol HasVacation {
+    func takeVacation(days: Int)
+}
+// Inheriting
+protocol Employee: Payable, NeedsTraining, HasVacation {
+
+}
+
+// Extensions - allows you to add methods to existing types.
+extension Int {
+    // Adding squared method
+    func squared() -> Int {
+        return self * self
+    }
+}
+
+var mynumber = 5
+print(mynumber.squared())
+
+// Protocol Extensions - extend a whole protocol so that all conforming types get your changes.
+
+// Swift’s arrays and sets both conform to a protocol called Collection, so we can write an extension to that protocol to add a summarize() method to print the collection neatly
+
+extension Collection {
+    func summarize() {
+        print("There are \(count) elements in this collection:")
+        for element in self {
+            print(element)
+        }
+    }
+}
+
+let pythons = ["Python", "Ruby", "Swift", "JavaScript"]
+pythons.summarize()
+
+// Protocol Oriented Programming (POP) - Protocol extensions can provide default implementations for our own protocol methods. This makes it easy for types to conform to a protocol, and allows a technique called “protocol-oriented programming” – crafting your code around protocols and protocol extensions.
+
+protocol Identifiable2 {
+    var id: String { get set }
+    func identify()
+}
+// Every confomring type will have their own indentify method
+extension Identifiable2 {
+    func identify() {
+        print("My ID is \(id)")
+    }
+}
+
+// Remember after creating a protocol we must make a stuct in order to use it
+struct Person4: Identifiable2 {
+    var id: String
+}
+let person4 = Person4(id: "1234")
+person4.identify()
+
+// Day 11 completed
+
+// Optionals
+
+// Handeling missing data - Use ? for values your unsure about
+var optionalString: String? = nil
+
+// Unwrapping - lets you look insife the optional - > use 'if let'
+if let unwrappedString = optionalString {
+    print(unwrappedString)
+} else {
+    print("optionalString is nil")
+}
+
+// Unwrappign with gaurd - guard let will unwrap an optional for you, but if it finds nil inside it expects you to exit the function, loop, or condition you used it in.
+
+func greet(_ name: String?) {
+    guard let unwrapped = name else {
+        print("You didn't provide a name!")
+        return
+    }
+
+    print("Hello, \(unwrapped)!")
+}
+
+// Force unwrapping use '!' to force unwrapping
+let str1 = "5"
+// Converts string to an optional Int. This is safe because if we str was "dog" the code wont crash
+let num = Int(str1)
+// Forcing the str to be Int. Inly should be used if you know the value will be an integer. This can crash code if used improperly
+let num2 = Int(str1)!
+
+// Nil coalescing - unwraps an optional and returns the value inside if there is one. If there isn’t a value – if the optional was nil – then a default value is used instead
+func name(id: Int) -> String? {
+    if id == 1 {
+        return "Gunna"
+    } else {
+        return nil
+    }
+}
+// ?? Allows for the nil return to be Anon
+let name5 = name(id: 15) ?? "Anon"
+
+// Optional chaining - a.b?.c -> Swift will check whether b has a value, and if it’s nil the rest of the line will be ignored – Swift will return nil immediately. But if it has a value, it will be unwrapped and execution will continue
+let names6 = ["John", "Paul", "Blake", nil]
+names6[2]?.uppercased()
+names6[3]?.uppercased()
+
+// Failable initializers - an initializer that might work or might not
+
+struct Car {
+    var id: String
+    // Optional initializer
+    init?(id: String) {
+        if id.count == 9 {
+            self.id = id
+        } else {
+            return nil
+        }
+    }
+}
+// Type casting - used to check the type of an instance or to treat that instance as a different superclass or subclass type using the is, as?, and as! operators. It’s commonly used when working with polymorphism
+
+// Main class
+class Animal {
+}
+// Inheriting classes
+class Fish: Animal {
+}
+
+class Cat: Animal {
+    func MakeNoise() {
+        print("Meow! Meow!")
+    }
+}
+
+let pets = [Fish(), Cat(), Fish(), Fish(), Cat()]
+// Check type of instance (type casting)
+for pet in pets {
+    // if let unwraps pet. as? checks if the currrent pet instance is of type Cat
+    if let cat = pet as? Cat {
+        cat.MakeNoise()
+    }
+}
+
+// Day 12 completed
+
+// Review: Functions, Optionals, Enumerations, Structs, Classes
+
+// Create a favorite album function
+func favoriteAlbum(name: String) {
+    print("My favorite album is \(name)")
+}
+print(favoriteAlbum(name: "Wunna"))
+
+func cubed(_ number: Int) -> Int {
+    return number * number * number
+}
+var myNum = 10
+print("\(myNum) cubed is \(cubed(myNum))")
+
+// Optionals -  using nil
+
+func areYouHating(weather: String) -> String? {
+    if weather == "Sunny" {
+        return nil
+    } else {
+        return "Yes i am"
+    }
+}
+
+// Make sure to hadle nil
+var status = areYouHating(weather: "Sunny")
+
+func haterAction(status: String) {
+    if status == "Yes i am" {
+        print("Hating")
+    }
+}
+// Unwrapping the function
+if let haterStatus = areYouHating(weather: "Rainy") {
+    // If function has String type
+    haterAction(status: haterStatus)
+} else {
+    // Has nil type
+    print("Not hating")
+}
+
+// Optional Chaining
+func albumReleased(year: Int) -> String? {
+    switch year {
+    case 2006: return "Future"
+    case 2008: return "Lil Wayne"
+    default: return nil
+    }
+}
+
+// Optional chaining is the ?.uppercased()
+let album = albumReleased(year: 2006)?.uppercased()
+print("\(album)")
+
+//Enumerations - define your own value | Can add values to enums - > Classical(founded: Int)
+enum Genre {
+    case Rock, Jazz, HipHop, Classical
+}
+
+func getLoveStatus(genre: Genre) -> String? {
+    if genre == .HipHop {
+        return "I love it"
+    } else {
+        return nil
+    }
+}
+print("\(getLoveStatus(genre: Genre.Rock))")
